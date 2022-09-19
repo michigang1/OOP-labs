@@ -21,6 +21,7 @@ class DialogActivity2 : AppCompatActivity() {
             }
             noBtn.setOnClickListener {
                 val intent = Intent(this@DialogActivity2, MainActivity::class.java)
+                finish()
                 startActivity(intent)
             }
         }

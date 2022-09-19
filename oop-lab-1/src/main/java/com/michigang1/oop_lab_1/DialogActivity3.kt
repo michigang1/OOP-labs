@@ -16,10 +16,12 @@ class DialogActivity3 : AppCompatActivity() {
         binding.apply {
             yesBtn.setOnClickListener {
                 val intent = Intent(this@DialogActivity3, MainActivity::class.java)
+                finish()
                 startActivity(intent)
             }
             noBtn.setOnClickListener {
                 val intent = Intent(this@DialogActivity3, MainActivity::class.java)
+                finish()
                 startActivity(intent)
             }
             previousBtn.setOnClickListener {

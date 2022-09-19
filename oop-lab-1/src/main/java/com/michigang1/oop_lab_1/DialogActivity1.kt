@@ -17,10 +17,14 @@ class DialogActivity1 : AppCompatActivity() {
         binding.apply {
             yesBtn.setOnClickListener {
                 val stringSeekBarValue = seekBar.progress.toString()
-                txtView.text = stringSeekBarValue
+                val intent = Intent(this@DialogActivity1, MainActivity::class.java)
+                intent.putExtra("value", stringSeekBarValue)
+                finish()
+                startActivity(intent)
             }
             noBtn.setOnClickListener {
                 val intent = Intent(this@DialogActivity1, MainActivity::class.java)
+                finish()
                 startActivity(intent)
             }
         }

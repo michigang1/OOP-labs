@@ -14,12 +14,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.apply {
+            txtView.text = intent.getStringExtra("value")
             firstBtn.setOnClickListener {
                 val intent = Intent(this@MainActivity, DialogActivity1::class.java)
+                finish()
                 startActivity(intent)
             }
             secondBtn.setOnClickListener {
                 val intent = Intent(this@MainActivity, DialogActivity2::class.java)
+                finish()
                 startActivity(intent)
             }
         }
