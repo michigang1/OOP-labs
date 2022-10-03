@@ -42,7 +42,7 @@ class DrawingView(context: Context?) : View(context) {
                 SMOOTHLINE -> SmoothLine().onDrawShape(canvas)
                 RECTANGLE -> onDrawRectangle(canvas)
                 SQUARE -> onDrawSquare(canvas)
-                ELLIPSE -> onDrawCircle(canvas)
+                ELLIPSE -> Ellipse().onDrawShape(canvas)
             }
         }
     }
@@ -78,7 +78,7 @@ class DrawingView(context: Context?) : View(context) {
             SMOOTHLINE -> SmoothLine().onTouchEventShape(event)
             RECTANGLE -> onTouchEventRectangle(event)
             SQUARE -> onTouchEventSquare(event)
-            ELLIPSE -> onTouchEventCircle(event)
+            ELLIPSE -> Ellipse().onTouchEventShape(event)
         }
         return true
     }
@@ -162,33 +162,34 @@ class DrawingView(context: Context?) : View(context) {
     // ------------------------------------------------------------------
     // Ellipse
     // ------------------------------------------------------------------
-    private fun onDrawCircle(canvas: Canvas) {
-        drawEllipse(canvas, mPaint)
-    }
+    open inner class Ellipse() : DrawingView.Shapes() {
+        override fun onDrawShape(canvas: Canvas?) {
+            drawEllipse(canvas, mPaint)
+        }
 
-    private fun onTouchEventCircle(event: MotionEvent?) {
-        when (event?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                isDrawing = true
-                mStartX = mCurrentX
-                mStartY = mCurrentY
-                invalidate()
-            }
-            MotionEvent.ACTION_MOVE -> invalidate()
-            MotionEvent.ACTION_UP -> {
-                isDrawing = false
-                drawEllipse(mCanvas, mPaint)
-                invalidate()
+        override fun onTouchEventShape(event: MotionEvent?) {
+            when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    isDrawing = true
+                    mStartX = mCurrentX
+                    mStartY = mCurrentY
+                    invalidate()
+                }
+                MotionEvent.ACTION_MOVE -> invalidate()
+                MotionEvent.ACTION_UP -> {
+                    isDrawing = false
+                    drawEllipse(mCanvas, mPaint)
+                    invalidate()
+                }
             }
         }
-    }
-
-    private fun drawEllipse(canvas: Canvas?, paint: Paint?) {
-        val right = if (mStartX > mCurrentX) mStartX else mCurrentX
-        val left = if (mStartX > mCurrentX) mCurrentX else mStartX
-        val bottom = if (mStartY > mCurrentY) mStartY else mCurrentY
-        val top = if (mStartY > mCurrentY) mCurrentY else mStartY
-        canvas!!.drawOval(left, top, right, bottom, paint!!)
+        private fun drawEllipse(canvas: Canvas?, paint: Paint?) {
+            val right = if (mStartX > mCurrentX) mStartX else mCurrentX
+            val left = if (mStartX > mCurrentX) mCurrentX else mStartX
+            val bottom = if (mStartY > mCurrentY) mStartY else mCurrentY
+            val top = if (mStartY > mCurrentY) mCurrentY else mStartY
+            canvas!!.drawOval(left, top, right, bottom, paint!!)
+        }
     }
 
     // ------------------------------------------------------------------
