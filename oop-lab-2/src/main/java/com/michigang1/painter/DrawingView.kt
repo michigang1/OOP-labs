@@ -41,7 +41,7 @@ class DrawingView(context: Context?) : View(context) {
                 LINE -> Line().onDrawShape(canvas)
                 SMOOTHLINE -> SmoothLine().onDrawShape(canvas)
                 RECTANGLE -> onDrawRectangle(canvas)
-                SQUARE -> onDrawSquare(canvas)
+                SQUARE -> Square().onDrawShape(canvas)
                 ELLIPSE -> Ellipse().onDrawShape(canvas)
             }
         }
@@ -77,13 +77,13 @@ class DrawingView(context: Context?) : View(context) {
             LINE -> Line().onTouchEventShape(event)
             SMOOTHLINE -> SmoothLine().onTouchEventShape(event)
             RECTANGLE -> onTouchEventRectangle(event)
-            SQUARE -> onTouchEventSquare(event)
+            SQUARE -> Square().onTouchEventShape(event)
             ELLIPSE -> Ellipse().onTouchEventShape(event)
         }
         return true
     }
 
-    abstract inner class Shapes() {
+    abstract inner class Shapes {
         open fun onDrawShape(canvas: Canvas?) {}
         open fun onTouchEventShape(event: MotionEvent?) {}
         open fun drawShape(canvas: Canvas?, paint: Paint?) {}
@@ -162,7 +162,7 @@ class DrawingView(context: Context?) : View(context) {
     // ------------------------------------------------------------------
     // Ellipse
     // ------------------------------------------------------------------
-    open inner class Ellipse() : DrawingView.Shapes() {
+    open inner class Ellipse : DrawingView.Shapes() {
         override fun onDrawShape(canvas: Canvas?) {
             drawEllipse(canvas, mPaint)
         }
@@ -227,37 +227,37 @@ class DrawingView(context: Context?) : View(context) {
     // ------------------------------------------------------------------
     // Square
     // ------------------------------------------------------------------
-    private fun onDrawSquare(canvas: Canvas) {
-        onDrawRectangle(canvas)
-    }
-
-    private fun onTouchEventSquare(event: MotionEvent) {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                isDrawing = true
-                mStartX = mCurrentX
-                mStartY = mCurrentY
-                invalidate()
-            }
-            MotionEvent.ACTION_MOVE -> {
-                adjustSquare(mCurrentX, mCurrentY)
-                invalidate()
-            }
-            MotionEvent.ACTION_UP -> {
-                isDrawing = false
-                adjustSquare(mCurrentX, mCurrentY)
-                drawRectangle(mCanvas, mPaintFinal)
-                invalidate()
+    open inner class Square : DrawingView.Shapes() {
+        private fun onDrawSquare(canvas: Canvas) {
+            onDrawRectangle(canvas)
+        }
+        override fun onTouchEventShape(event: MotionEvent?) {
+            when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    isDrawing = true
+                    mStartX = mCurrentX
+                    mStartY = mCurrentY
+                    invalidate()
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    adjustSquare(mCurrentX, mCurrentY)
+                    invalidate()
+                }
+                MotionEvent.ACTION_UP -> {
+                    isDrawing = false
+                    adjustSquare(mCurrentX, mCurrentY)
+                    drawRectangle(mCanvas, mPaintFinal)
+                    invalidate()
+                }
             }
         }
-    }
-
-    private fun adjustSquare(x: Float, y: Float) {
-        val deltaX = abs(mStartX - x)
-        val deltaY = abs(mStartY - y)
-        val max = deltaX.coerceAtLeast(deltaY)
-        mCurrentX = if (mStartX - x < 0) mStartX + max else mStartX - max
-        mCurrentY = if (mStartY - y < 0) mStartY + max else mStartY - max
+        private fun adjustSquare(x: Float, y: Float) {
+            val deltaX = abs(mStartX - x)
+            val deltaY = abs(mStartY - y)
+            val max = deltaX.coerceAtLeast(deltaY)
+            mCurrentX = if (mStartX - x < 0) mStartX + max else mStartX - max
+            mCurrentY = if (mStartY - y < 0) mStartY + max else mStartY - max
+        }
     }
 
     companion object {
