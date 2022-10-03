@@ -40,7 +40,7 @@ class DrawingView(context: Context?) : View(context) {
             when (mCurrentShape) {
                 LINE -> Line().onDrawShape(canvas)
                 SMOOTHLINE -> SmoothLine().onDrawShape(canvas)
-                RECTANGLE -> onDrawRectangle(canvas)
+                RECTANGLE -> Rectangle().onDrawShape(canvas)
                 SQUARE -> Square().onDrawShape(canvas)
                 ELLIPSE -> Ellipse().onDrawShape(canvas)
             }
@@ -76,7 +76,7 @@ class DrawingView(context: Context?) : View(context) {
         when (mCurrentShape) {
             LINE -> Line().onTouchEventShape(event)
             SMOOTHLINE -> SmoothLine().onTouchEventShape(event)
-            RECTANGLE -> onTouchEventRectangle(event)
+            RECTANGLE -> Rectangle().onTouchEventShape(event)
             SQUARE -> Square().onTouchEventShape(event)
             ELLIPSE -> Ellipse().onTouchEventShape(event)
         }
@@ -195,41 +195,35 @@ class DrawingView(context: Context?) : View(context) {
     // ------------------------------------------------------------------
     // Rectangle
     // ------------------------------------------------------------------
-    private fun onDrawRectangle(canvas: Canvas) {
-        drawRectangle(canvas, mPaint)
-    }
+    open inner class Rectangle() : DrawingView.Shapes() {
+        override fun onDrawShape(canvas: Canvas?) {
+            drawRectangular(canvas, mPaint)
+        }
 
-    private fun onTouchEventRectangle(event: MotionEvent) {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                isDrawing = true
-                mStartX = mCurrentX
-                mStartY = mCurrentY
-                invalidate()
-            }
-            MotionEvent.ACTION_MOVE -> invalidate()
-            MotionEvent.ACTION_UP -> {
-                isDrawing = false
-                drawRectangle(mCanvas, mPaintFinal)
-                invalidate()
+        override fun onTouchEventShape(event: MotionEvent?) {
+            when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    isDrawing = true
+                    mStartX = mCurrentX
+                    mStartY = mCurrentY
+                    invalidate()
+                }
+                MotionEvent.ACTION_MOVE -> invalidate()
+                MotionEvent.ACTION_UP -> {
+                    isDrawing = false
+                    drawRectangular(mCanvas, mPaintFinal)
+                    invalidate()
+                }
             }
         }
-    }
-
-    private fun drawRectangle(canvas: Canvas?, paint: Paint?) {
-        val right = if (mStartX > mCurrentX) mStartX else mCurrentX
-        val left = if (mStartX > mCurrentX) mCurrentX else mStartX
-        val bottom = if (mStartY > mCurrentY) mStartY else mCurrentY
-        val top = if (mStartY > mCurrentY) mCurrentY else mStartY
-        canvas!!.drawRect(left, top, right, bottom, paint!!)
     }
 
     // ------------------------------------------------------------------
     // Square
     // ------------------------------------------------------------------
     open inner class Square : DrawingView.Shapes() {
-        private fun onDrawSquare(canvas: Canvas) {
-            onDrawRectangle(canvas)
+        override fun onDrawShape(canvas: Canvas?) {
+            drawRectangular(canvas, mPaint)
         }
         override fun onTouchEventShape(event: MotionEvent?) {
             when (event?.action) {
@@ -246,7 +240,7 @@ class DrawingView(context: Context?) : View(context) {
                 MotionEvent.ACTION_UP -> {
                     isDrawing = false
                     adjustSquare(mCurrentX, mCurrentY)
-                    drawRectangle(mCanvas, mPaintFinal)
+                    drawRectangular(mCanvas, mPaintFinal)
                     invalidate()
                 }
             }
@@ -258,6 +252,13 @@ class DrawingView(context: Context?) : View(context) {
             mCurrentX = if (mStartX - x < 0) mStartX + max else mStartX - max
             mCurrentY = if (mStartY - y < 0) mStartY + max else mStartY - max
         }
+    }
+    fun drawRectangular(canvas: Canvas?, paint: Paint?) {
+        val right = if (mStartX > mCurrentX) mStartX else mCurrentX
+        val left = if (mStartX > mCurrentX) mCurrentX else mStartX
+        val bottom = if (mStartY > mCurrentY) mStartY else mCurrentY
+        val top = if (mStartY > mCurrentY) mCurrentY else mStartY
+        canvas!!.drawRect(left, top, right, bottom, paint!!)
     }
 
     companion object {
