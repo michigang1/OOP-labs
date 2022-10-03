@@ -33,13 +33,13 @@ class DrawingView(context: Context?) : View(context) {
         mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         mCanvas = Canvas(mBitmap)
     }
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawBitmap(mBitmap, 0f, 0f, mPaint)
         if (isDrawing) {
             when (mCurrentShape) {
-                LINE -> onDrawLine(canvas)
+                LINE -> Line().onDrawShape(canvas)
+                SMOOTHLINE -> SmoothLine().onDrawShape(canvas)
                 RECTANGLE -> onDrawRectangle(canvas)
                 SQUARE -> onDrawSquare(canvas)
                 ELLIPSE -> onDrawCircle(canvas)
@@ -74,8 +74,8 @@ class DrawingView(context: Context?) : View(context) {
         mCurrentX = event!!.x
         mCurrentY = event!!.y
         when (mCurrentShape) {
-            LINE -> onTouchEventLine(event)
-            SMOOTHLINE -> onTouchEventSmoothLine(event)
+            LINE -> Line().onTouchEventShape(event)
+            SMOOTHLINE -> SmoothLine().onTouchEventShape(event)
             RECTANGLE -> onTouchEventRectangle(event)
             SQUARE -> onTouchEventSquare(event)
             ELLIPSE -> onTouchEventCircle(event)
@@ -83,66 +83,78 @@ class DrawingView(context: Context?) : View(context) {
         return true
     }
 
-    // ------------------------------------------------------------------
-    // Line
-    // ------------------------------------------------------------------
-    private fun onDrawLine(canvas: Canvas) {
-        val dx = abs(mCurrentX - mStartX)
-        val dy = abs(mCurrentY - mStartY)
-        if (dx >= touchTolerance || dy >= touchTolerance) {
-            canvas.drawLine(mStartX, mStartY, mCurrentX, mCurrentY, mPaint)
+    abstract inner class Shapes() {
+        open fun onDrawShape(canvas: Canvas?) {}
+        open fun onTouchEventShape(event: MotionEvent?) {}
+        open fun drawShape(canvas: Canvas?, paint: Paint?) {}
+    }
+
+    open inner class Line : DrawingView.Shapes() {
+        override fun onDrawShape(canvas: Canvas?) {
+            val dx = abs(mCurrentX - mStartX)
+            val dy = abs(mCurrentY - mStartY)
+            if (dx >= touchTolerance || dy >= touchTolerance) {
+                canvas?.drawLine(mStartX, mStartY, mCurrentX, mCurrentY, mPaint)
+            }
+        }
+
+        override fun onTouchEventShape(event: MotionEvent?) {
+            when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    isDrawing = true
+                    mStartX = mCurrentX
+                    mStartY = mCurrentY
+                    invalidate()
+                }
+                MotionEvent.ACTION_MOVE -> invalidate()
+                MotionEvent.ACTION_UP -> {
+                    isDrawing = false
+                    mCanvas.drawLine(mStartX, mStartY, mCurrentX, mCurrentY, mPaintFinal)
+                    invalidate()
+                }
+            }
         }
     }
 
-    private fun onTouchEventLine(event: MotionEvent?) {
-        when (event?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                isDrawing = true
-                mStartX = mCurrentX
-                mStartY = mCurrentY
-                invalidate()
-            }
-            MotionEvent.ACTION_MOVE -> invalidate()
-            MotionEvent.ACTION_UP -> {
-                isDrawing = false
-                mCanvas.drawLine(mStartX, mStartY, mCurrentX, mCurrentY, mPaintFinal)
-                invalidate()
-            }
-        }
-    }
+    // ------------------------------------------------------------------
+    // Line
+    // ------------------------------------------------------------------
 
     // ------------------------------------------------------------------
     // Smooth Line
     // ------------------------------------------------------------------
-    private fun onTouchEventSmoothLine(event: MotionEvent?) {
-        when (event?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                isDrawing = true
-                mStartX = mCurrentX
-                mStartY = mCurrentY
-                mPath.reset()
-                mPath.moveTo(mCurrentX, mCurrentY)
-                invalidate()
-            }
-            MotionEvent.ACTION_MOVE -> {
-                val dX = abs(mCurrentX - mStartX)
-                val dY = abs(mCurrentY - mStartY)
-                if (dX >= touchTolerance || dY >= touchTolerance) {
-                    val lastX = (mCurrentX + mStartX) / 2
-                    val lastY = (mCurrentY + mStartY) / 2
-                    mPath.quadTo(mStartX, mStartY, lastX, lastY)
+    open inner class SmoothLine :
+        DrawingView.Shapes() {
+        override fun onTouchEventShape(event: MotionEvent?) {
+            when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    isDrawing = true
                     mStartX = mCurrentX
                     mStartY = mCurrentY
+                    mPath.reset()
+                    mPath.moveTo(mCurrentX, mCurrentY)
+                    invalidate()
                 }
-                mCanvas.drawPath(mPath, mPaint)
-                invalidate()
-            }
-            MotionEvent.ACTION_UP -> {
-                isDrawing = false
-                mPath.lineTo(mStartX, mStartY)
-                mCanvas.drawPath(mPath, mPaintFinal)
-                mPath.reset()
-                invalidate()
+                MotionEvent.ACTION_MOVE -> {
+                    val dX = abs(mCurrentX - mStartX)
+                    val dY = abs(mCurrentY - mStartY)
+                    if (dX >= touchTolerance || dY >= touchTolerance) {
+                        val lastX = (mCurrentX + mStartX) / 2
+                        val lastY = (mCurrentY + mStartY) / 2
+                        mPath.quadTo(mStartX, mStartY, lastX, lastY)
+                        mStartX = mCurrentX
+                        mStartY = mCurrentY
+                    }
+                    mCanvas.drawPath(mPath, mPaint)
+                    invalidate()
+                }
+                MotionEvent.ACTION_UP -> {
+                    isDrawing = false
+                    mPath.lineTo(mStartX, mStartY)
+                    mCanvas.drawPath(mPath, mPaintFinal)
+                    mPath.reset()
+                    invalidate()
+                }
             }
         }
     }
