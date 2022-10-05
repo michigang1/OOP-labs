@@ -9,12 +9,12 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var drawingView: DrawingView
+    private lateinit var drawingShapeView: DrawingShapeView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        drawingView = DrawingView(this)
-        setContentView(drawingView)
+        drawingShapeView = DrawingShapeView(this)
+        setContentView(drawingShapeView)
         showSystemUI()
     }
 
@@ -26,25 +26,38 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_line -> {
-                drawingView.mCurrentShape = DrawingView.LINE
+                drawingShapeView.mCurrentShape = DrawingShapeView.LINE
+                val titleLine = resources.getString(R.string.action_line)
+                setTitle(titleLine)
             }
             R.id.action_smoothline -> {
-                drawingView.mCurrentShape = DrawingView.SMOOTHLINE
+                drawingShapeView.mCurrentShape = DrawingShapeView.SMOOTHLINE
+                val titleSmoothLine = resources.getString(R.string.action_smoothline)
+                setTitle(titleSmoothLine)
             }
             R.id.action_rectangle -> {
-                drawingView.mCurrentShape = DrawingView.RECTANGLE
+                drawingShapeView.mCurrentShape = DrawingShapeView.RECTANGLE
+                val titleRectangle = resources.getString(R.string.action_rectangle)
+                setTitle(titleRectangle)
             }
             R.id.action_square -> {
-                drawingView.mCurrentShape = DrawingView.SQUARE
+                drawingShapeView.mCurrentShape = DrawingShapeView.SQUARE
+                val titleSquare = resources.getString(R.string.action_square)
+                setTitle(titleSquare)
             }
             R.id.action_ellipse -> {
-                drawingView.mCurrentShape = DrawingView.ELLIPSE
+                drawingShapeView.mCurrentShape = DrawingShapeView.ELLIPSE
+                val titleEllipse = resources.getString(R.string.action_ellipse)
+                setTitle(titleEllipse)
             }
         }
         return super.onOptionsItemSelected(item)
     }
     private fun showSystemUI() {
         WindowCompat.setDecorFitsSystemWindows(window, true)
-        WindowInsetsControllerCompat(window, drawingView).show(WindowInsetsCompat.Type.systemBars())
+        WindowInsetsControllerCompat(window, drawingShapeView).show(WindowInsetsCompat.Type.systemBars())
+    }
+    private fun setTitle(title: String) {
+        supportActionBar?.subtitle = "Selected object: $title"
     }
 }
