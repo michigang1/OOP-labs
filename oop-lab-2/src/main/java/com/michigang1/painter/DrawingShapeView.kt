@@ -21,9 +21,9 @@ class DrawingShapeView(context: Context?) : View(context) {
     private var mTouchTolerance: Int = 0
 
     // Figures
-    private val shapeLine = ShapeLine(Color.RED)
-    private val shapeSmoothLine = ShapeSmoothLine(Color.RED)
-    private val shapeRectangle = ShapeRectangle(Color.BLACK, Color.RED)
+    private val shapeLine = ShapeLine(Color.GRAY)
+    private val shapeSmoothLine = ShapeSmoothLine(Color.BLUE)
+    private val shapeRectangle = ShapeRectangle(Color.BLACK, Color.WHITE)
     private val shapeSquare = ShapeSquare(Color.BLACK, Color.WHITE)
     private val shapeEllipse = ShapeEllipse(Color.BLACK, Color.BLACK, Paint.Style.STROKE)
 
@@ -68,14 +68,13 @@ class DrawingShapeView(context: Context?) : View(context) {
     // ------------------------------------------------------------------
 
     inner class ShapeLine(color: Int) : Shape() {
-        private val paint = Paint().setPaintShape(color)
-        private val paintFinal = Paint().setPaintShape(color)
+        private val paintStart = Paint().setPaintShape(Color.RED)
+        private val paintStroke = Paint().setPaintShape(color)
         override fun onDrawShape(canvas: Canvas?) {
             val dx = abs(mCurrentX - mStartX)
             val dy = abs(mCurrentY - mStartY)
             if (dx >= mTouchTolerance || dy >= mTouchTolerance) {
-                canvas?.drawLine(mStartX, mStartY, mCurrentX, mCurrentY, paintFinal)
-                canvas?.drawLine(mStartX, mStartY, mCurrentX, mCurrentY, paint)
+                canvas?.drawLine(mStartX, mStartY, mCurrentX, mCurrentY, paintStroke)
             }
         }
 
@@ -90,8 +89,7 @@ class DrawingShapeView(context: Context?) : View(context) {
                 MotionEvent.ACTION_MOVE -> invalidate()
                 MotionEvent.ACTION_UP -> {
                     isDrawing = false
-                    mCanvas.drawLine(mStartX, mStartY, mCurrentX, mCurrentY, paintFinal)
-                    mCanvas.drawLine(mStartX, mStartY, mCurrentX, mCurrentY, paint)
+                    mCanvas.drawLine(mStartX, mStartY, mCurrentX, mCurrentY, paintStroke)
                     invalidate()
                 }
             }
@@ -102,7 +100,7 @@ class DrawingShapeView(context: Context?) : View(context) {
     // Smooth Line
     // ------------------------------------------------------------------
     inner class ShapeSmoothLine(color: Int) : Shape() {
-        private val paint = Paint().setPaintShape(color)
+        private val paintSmoothLine = Paint().setPaintShape(color)
         override fun onDrawShape(canvas: Canvas?) {
             // empty  body
         }
@@ -127,13 +125,13 @@ class DrawingShapeView(context: Context?) : View(context) {
                         mStartX = mCurrentX
                         mStartY = mCurrentY
                     }
-                    mCanvas.drawPath(mPath, paint)
+                    mCanvas.drawPath(mPath, paintSmoothLine)
                     invalidate()
                 }
                 MotionEvent.ACTION_UP -> {
                     isDrawing = false
                     mPath.lineTo(mStartX, mStartY)
-                    mCanvas.drawPath(mPath, paint)
+                    mCanvas.drawPath(mPath, paintSmoothLine)
                     mPath.reset()
                     invalidate()
                 }
@@ -149,11 +147,11 @@ class DrawingShapeView(context: Context?) : View(context) {
         colorFill: Int,
         styleFill: Paint.Style = Paint.Style.FILL
     ) : Shape() {
-        private val paint = Paint().setPaintShape(colorStroke)
-        private val paintFinal = Paint().setPaintShape(colorFill, styleFill)
+        private val paintStart = Paint().setPaintShape(Color.RED)
+        private val paintStroke = Paint().setPaintShape(colorStroke)
+        private val paintFill = Paint().setPaintShape(colorFill, styleFill)
         override fun onDrawShape(canvas: Canvas?) {
-            drawEllipse(canvas, paintFinal)
-            drawEllipse(canvas, paint)
+            drawEllipse(canvas, paintStart)
         }
 
         override fun onTouchEventShape(event: MotionEvent?) {
@@ -167,8 +165,8 @@ class DrawingShapeView(context: Context?) : View(context) {
                 MotionEvent.ACTION_MOVE -> invalidate()
                 MotionEvent.ACTION_UP -> {
                     isDrawing = false
-                    drawEllipse(mCanvas, paintFinal)
-                    drawEllipse(mCanvas, paint)
+                    drawEllipse(mCanvas, paintFill)
+                    drawEllipse(mCanvas, paintStroke)
                     invalidate()
                 }
             }
@@ -190,12 +188,12 @@ class DrawingShapeView(context: Context?) : View(context) {
         colorFill: Int,
         styleFill: Paint.Style = Paint.Style.FILL_AND_STROKE
     ) : Shape() {
-        private val paint = Paint().setPaintShape(colorStroke)
-        private val paintFinal = Paint().setPaintShape(colorFill, styleFill)
+        private val paintStart = Paint().setPaintShape(Color.RED)
+        private val paintStoke = Paint().setPaintShape(colorStroke)
+        private val paintFill = Paint().setPaintShape(colorFill, styleFill)
 
         override fun onDrawShape(canvas: Canvas?) {
-            drawRectangular(canvas, paintFinal)
-            drawRectangular(canvas, paint)
+            drawRectangular(canvas, paintStart)
         }
 
         override fun onTouchEventShape(event: MotionEvent?) {
@@ -209,8 +207,8 @@ class DrawingShapeView(context: Context?) : View(context) {
                 MotionEvent.ACTION_MOVE -> invalidate()
                 MotionEvent.ACTION_UP -> {
                     isDrawing = false
-                    drawRectangular(mCanvas, paintFinal)
-                    drawRectangular(mCanvas, paint)
+                    drawRectangular(mCanvas, paintFill)
+                    drawRectangular(mCanvas, paintStoke)
                     invalidate()
                 }
             }
@@ -226,12 +224,12 @@ class DrawingShapeView(context: Context?) : View(context) {
         colorFill: Int,
         styleFill: Paint.Style = Paint.Style.FILL
     ) : Shape() {
-        private val paint = Paint().setPaintShape(colorStroke)
-        private val paintFinal = Paint().setPaintShape(colorFill, styleFill)
+        private val paintStart = Paint().setPaintShape(Color.RED)
+        private val paintStroke = Paint().setPaintShape(colorStroke)
+        private val paintFill = Paint().setPaintShape(colorFill, styleFill)
 
         override fun onDrawShape(canvas: Canvas?) {
-            drawRectangular(canvas, paintFinal)
-            drawRectangular(canvas, paint)
+            drawRectangular(canvas, paintStart)
         }
         override fun onTouchEventShape(event: MotionEvent?) {
             when (event?.action) {
@@ -248,8 +246,8 @@ class DrawingShapeView(context: Context?) : View(context) {
                 MotionEvent.ACTION_UP -> {
                     isDrawing = false
                     adjustSquare(mCurrentX, mCurrentY)
-                    drawRectangular(mCanvas, paintFinal)
-                    drawRectangular(mCanvas, paint)
+                    drawRectangular(mCanvas, paintFill)
+                    drawRectangular(mCanvas, paintStroke)
                     invalidate()
                 }
             }
