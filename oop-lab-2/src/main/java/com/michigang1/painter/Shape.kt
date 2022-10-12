@@ -1,22 +1,89 @@
 package com.michigang1.painter
 
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.content.Context
+import android.graphics.*
 import android.view.MotionEvent
+import android.view.View
 
-abstract class Shape : Canvas() {
-    abstract fun onTouchEventShape(event: MotionEvent?)
-    abstract fun onDrawShape(canvas: Canvas?)
-    open fun Paint.setPaintShape(mColor: Int?, mStyle: Paint.Style? = Paint.Style.STROKE): Paint {
-        val paint = Paint(Paint.DITHER_FLAG).apply {
-            isAntiAlias = true
-            isDither = true
-            color = mColor!!
-            style = mStyle!!
-            strokeJoin = Paint.Join.ROUND
-            strokeCap = Paint.Cap.ROUND
-            strokeWidth = DrawingShapeView.TOUCH_STROKE_WIDTH
+abstract class Shape(
+    context: Context,
+    private val canvas: Canvas?,
+    private val bitmap: Bitmap?,
+    private val strokeColor: Int = Color.BLACK,
+    private val fillColor: Int = Color.TRANSPARENT
+) : View(context) {
+    protected var mStartX = 0f
+    protected var mStartY = 0f
+    protected var mCurrentX = 0f
+    protected var mCurrentY = 0f
+    protected var path = Path()
+
+    private val paint = Paint().apply {
+        isAntiAlias
+        isDither
+        color = strokeColor
+        style = Paint.Style.FILL_AND_STROKE
+        strokeJoin = Paint.Join.ROUND
+        strokeCap = Paint.Cap.ROUND
+        strokeWidth = TOUCH_STROKE_WIDTH
+    }
+    private var startColor = Color.RED
+
+    protected abstract fun drawShape(canvas: Canvas, paint: Paint)
+
+    private fun setPaintShape(colorPaint: Int, stylePaint: Paint.Style) {
+        this.paint.color = colorPaint
+        this.paint.style = stylePaint
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        mCurrentX = event!!.x
+        mCurrentY = event.y
+        onTouchEventShape(event)
+        return true
+    }
+
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        canvas?.drawBitmap(bitmap!!, 0f, 0f, null)
+        drawShape(canvas!!, paint)
+    }
+
+    private fun onTouchEventShape(event: MotionEvent) {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> touchStart()
+            MotionEvent.ACTION_MOVE -> touchMove()
+            MotionEvent.ACTION_UP -> touchUp()
         }
-        return paint
+    }
+
+    private fun touchUp() {
+        invalidate()
+        setPaintShape(fillColor, Paint.Style.FILL)
+        drawShape(canvas!!, paint)
+        setPaintShape(strokeColor, Paint.Style.STROKE)
+        drawShape(canvas, paint)
+        mStartX = 0f
+        mStartY = 0f
+        mCurrentX = 0f
+        mCurrentY = 0f
+    }
+
+    private fun touchMove() {
+        invalidate()
+    }
+
+    private fun touchStart() {
+        setPaintShape(startColor, Paint.Style.STROKE)
+        mStartX = mCurrentX
+        mStartY = mCurrentY
+    }
+
+    companion object {
+        @JvmStatic
+        protected val TOUCH_TOLERANCE = 8f
+
+        @JvmStatic
+        protected val TOUCH_STROKE_WIDTH = 8f
     }
 }
