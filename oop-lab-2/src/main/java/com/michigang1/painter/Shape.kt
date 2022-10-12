@@ -9,10 +9,15 @@ abstract class Shape(
     context: Context,
     private val canvas: Canvas?,
     private val bitmap: Bitmap?,
-    private val strokeColor: Int,
-    private val fillColor: Int
+    private val strokeColor: Int = Color.BLACK,
+    private val fillColor: Int = Color.TRANSPARENT
 ) : View(context) {
+    protected var mStartX = 0f
+    protected var mStartY = 0f
+    protected var mCurrentX = 0f
+    protected var mCurrentY = 0f
     protected var path = Path()
+
     private val paint = Paint().apply {
         isAntiAlias
         isDither
@@ -22,8 +27,7 @@ abstract class Shape(
         strokeCap = Paint.Cap.ROUND
         strokeWidth = TOUCH_STROKE_WIDTH
     }
-
-    protected var startColor = strokeColor
+    private var startColor = Color.RED
 
     protected abstract fun drawShape(canvas: Canvas, paint: Paint)
 
@@ -42,10 +46,6 @@ abstract class Shape(
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas?.drawBitmap(bitmap!!, 0f, 0f, null)
-        onDrawShape(canvas)
-    }
-
-    private fun onDrawShape(canvas: Canvas?) {
         drawShape(canvas!!, paint)
     }
 
@@ -79,15 +79,11 @@ abstract class Shape(
         mStartY = mCurrentY
     }
 
-    protected var mStartX = 0f
+    companion object {
+        @JvmStatic
+        protected val TOUCH_TOLERANCE = 8f
 
-    protected var mStartY = 0f
-
-    protected var mCurrentX = 0f
-
-    protected var mCurrentY = 0f
-
-    protected val TOUCH_TOLERANCE = 8f
-
-    protected val TOUCH_STROKE_WIDTH = 5f
+        @JvmStatic
+        protected val TOUCH_STROKE_WIDTH = 8f
+    }
 }

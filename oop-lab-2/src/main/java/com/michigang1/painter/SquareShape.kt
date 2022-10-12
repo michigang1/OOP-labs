@@ -14,7 +14,6 @@ class SquareShape(
     bitmap: Bitmap,
     strokeColor: Int,
     fillColor: Int
-
 ) : Shape(context, canvas, bitmap, strokeColor, fillColor) {
     override fun drawShape(canvas: Canvas, paint: Paint) {
         val deltaX = abs(mStartX - mCurrentX)

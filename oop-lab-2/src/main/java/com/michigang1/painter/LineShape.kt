@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import kotlin.math.abs
 
@@ -14,8 +13,7 @@ class LineShape(
     canvas: Canvas,
     bitmap: Bitmap,
     strokeColor: Int,
-    private val fillColor: Int = Color.TRANSPARENT
-
+    fillColor: Int
 ) : Shape(context, canvas, bitmap, strokeColor, fillColor) {
     override fun drawShape(canvas: Canvas, paint: Paint) {
         val dx = abs(mCurrentX - mStartX)

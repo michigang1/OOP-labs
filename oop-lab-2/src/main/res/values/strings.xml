@@ -5,6 +5,6 @@
     <string name="action_ellipse">Ellipse</string>
     <string name="action_square">Square</string>
     <string name="action_rectangle">Rectangle</string>
-    <string name="action_smoothline">Smooth line</string>
+    <string name="action_point">Point</string>
     <string name="action_line">Line</string>
 </resources>
