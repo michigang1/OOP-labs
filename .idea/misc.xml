@@ -3,15 +3,36 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.12781701984527413" />
         <entry key="oop-lab-1/src/main/res/layout/activity_dialog1.xml" value="0.45286407470703127" />
         <entry key="oop-lab-1/src/main/res/layout/activity_dialog2.xml" value="0.2758152173913043" />
         <entry key="oop-lab-1/src/main/res/layout/activity_dialog3.xml" value="0.2758152173913043" />
         <entry key="oop-lab-1/src/main/res/layout/activity_main.xml" value="0.3833755493164062" />
         <entry key="oop-lab-1/src/main/res/menu/menu_main.xml" value="0.3880208333333333" />
+        <entry key="oop-lab-2/src/main/res/layout/activity_main.xml" value="0.2078125" />
+        <entry key="oop-lab-2/src/main/res/layout/fragment_shape.xml" value="0.2565673828125" />
+        <entry key="oop-lab-2/src/main/res/layout/main.xml" value="0.2078125" />
+        <entry key="oop-lab-2/src/main/res/menu/main.xml" value="0.20677083333333332" />
+        <entry key="oop-lab-3/src/main/res/drawable-v24/ellipse.xml" value="0.1925" />
+        <entry key="oop-lab-3/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1925" />
+        <entry key="oop-lab-3/src/main/res/drawable-v24/line.xml" value="0.1925" />
+        <entry key="oop-lab-3/src/main/res/drawable-v24/point.xml" value="0.1925" />
+        <entry key="oop-lab-3/src/main/res/drawable-v24/rectangle.xml" value="0.1925" />
+        <entry key="oop-lab-3/src/main/res/drawable-v24/square.xml" value="0.1925" />
+        <entry key="oop-lab-3/src/main/res/drawable/ic_launcher_background.xml" value="0.1925" />
+        <entry key="oop-lab-3/src/main/res/drawable/ic_slash_lg.xml" value="0.1925" />
+        <entry key="oop-lab-3/src/main/res/drawable/toolbar_shape.xml" value="0.1925" />
+        <entry key="oop-lab-3/src/main/res/layout/activity_main.xml" value="0.5063400268554686" />
+        <entry key="oop-lab-3/src/main/res/layout/tool_bar.xml" value="0.41337178548177084" />
+        <entry key="oop-lab-3/src/main/res/layout/toolbar.xml" value="0.18594104308390022" />
+        <entry key="oop-lab-3/src/main/res/menu/main.xml" value="0.7021276595744681" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17_PREVIEW" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -1,6 +1,7 @@
 package com.michigang1.oop_lab_1 // ktlint-disable package-name
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.michigang1.oop_lab_1.databinding.ActivityMainBinding
