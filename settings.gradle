@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 rootProject.name = "OOP-labs"
 include ':app'
 include ':oop-lab-1'
+include ':oop-lab-2'
+include ':oop-lab-3'

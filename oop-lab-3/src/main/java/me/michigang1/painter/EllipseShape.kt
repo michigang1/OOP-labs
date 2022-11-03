@@ -15,10 +15,13 @@ class EllipseShape(
     fillColor: Int
 ) : Shape(context, canvas, bitmap, strokeColor, fillColor) {
     override fun drawShape(canvas: Canvas, paint: Paint) {
-        val right = if (mStartX > mCurrentX) mStartX else mCurrentX
-        val left = if (mStartX > mCurrentX) mCurrentX else mStartX
-        val bottom = if (mStartY > mCurrentY) mStartY else mCurrentY
-        val top = if (mStartY > mCurrentY) mCurrentY else mStartY
+        val mTempX = 2 * mStartX - mCurrentX
+        val mTempY = 2 * mStartY - mCurrentY
+
+        val right = if (mTempX > mCurrentX) mTempX else mCurrentX
+        val left = if (mTempX > mCurrentX) mCurrentX else mTempX
+        val bottom = if (mTempY > mCurrentY) mCurrentY else mTempY
+        val top = if (mTempY > mCurrentY) mTempY else mCurrentY
         canvas.drawOval(left, top, right, bottom, paint)
     }
 }

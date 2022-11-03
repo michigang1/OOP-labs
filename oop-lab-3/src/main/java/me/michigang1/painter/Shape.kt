@@ -29,7 +29,7 @@ abstract class Shape(
         strokeCap = Paint.Cap.ROUND
         strokeWidth = TOUCH_STROKE_WIDTH
     }
-    private var startColor = Color.RED
+    private var startColor = Color.BLACK
 
     protected abstract fun drawShape(canvas: Canvas, paint: Paint)
 

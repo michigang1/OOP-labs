@@ -24,11 +24,11 @@ class DrawingShapeView(context: Context?) : View(context) {
     }
 
     // Shapes
-    val rectangleShape = RectangleShape(context!!, mCanvas, mBitmap, Color.BLACK, Color.WHITE)
-    val squareShape = SquareShape(context!!, mCanvas, mBitmap, Color.BLACK, Color.WHITE)
-    val ellipseShape = EllipseShape(context!!, mCanvas, mBitmap, Color.BLACK, Color.TRANSPARENT)
+    val rectangleShape = RectangleShape(context!!, mCanvas, mBitmap, Color.BLACK, Color.BLUE)
+    val squareShape = SquareShape(context!!, mCanvas, mBitmap, Color.BLACK, Color.YELLOW)
+    val ellipseShape = EllipseShape(context!!, mCanvas, mBitmap, Color.BLACK, Color.WHITE)
     val lineShape = LineShape(context!!, mCanvas, mBitmap, Color.BLACK, Color.TRANSPARENT)
-    val pointShape = PointShape(context!!, mCanvas, mBitmap, Color.BLACK, Color.TRANSPARENT)
+    val pointShape = PointShape(context!!, mCanvas, mBitmap, Color.GREEN, Color.TRANSPARENT)
 
     val shapesArray = arrayOf(rectangleShape, squareShape, ellipseShape, lineShape, pointShape)
 
